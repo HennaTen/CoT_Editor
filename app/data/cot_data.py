@@ -169,6 +169,32 @@ pronoun_nonbinary = {
     "pshasc": "They've",
 }
 
+pronoun_tags = {
+    "psc": "She | He | They",
+    "poc": "Her | Him | Them",
+    "ppc": "Her | His | Their",
+    "prc": "Herself | Himself | Themself",
+    "pqc": "Hers | His | Theirs",
+    "ps": "she | he | they",
+    "po": "her | him | them",
+    "pp": "her | his | their",
+    "pr": "herself | himself | themself",
+    "pq": "hers | his | theirs",
+    "noun": "woman | man | person",
+    "youngnoun": "girl | boy | kid",
+    "casualnoun": "girl | guyg | kid",
+    "mrs": "Mrs. | Mr. | Mx.",
+    "miss": "Miss | Mr. | Mx",
+    "ms": "Ms. | Mr. | Mx.",
+    "partner": "girlfriend | boyfriend | partner",
+    "spouse": "wife | husband | spouse",
+    "master": "Mistress | Master | Master",
+    "pss": "she's | he's | they're",
+    "pssc": "She's | He's | They're",
+    "pshas": "she's | he's | they've",
+    "pshasc": "She's | He's | They've",
+}
+
 """
 manwoman: noun
 boygirl: youngnoun
