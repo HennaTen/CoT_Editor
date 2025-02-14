@@ -165,7 +165,7 @@ class PassageFrame:
             index = int(passages_listbox.curselection()[0])
             value = passages_listbox.get(index)
             selected = value.split(" ")[0]
-            text = content_text.get("1.0", tk.END)
+            text = content_text.original_text  # get("1.0", tk.END) # TODO: Check if ok
             additional_data = None
             if full:
                 additional_data = {
