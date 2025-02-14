@@ -1,6 +1,7 @@
 import tkinter as tk
 from app.data.cot_data import pronoun_female, pronoun_male, pronoun_nonbinary
-
+from app.gui.elements.content_text import ContentText
+from app.gui.elements.right_click_menu import SexyRightClickMenu
 
 class PassageFrame:
     def __init__(self, root, parser):
@@ -112,48 +113,50 @@ class PassageFrame:
         generate_head_frame()
 
         content_frame = tk.Frame(middle_panel)
-        content_text = tk.Text(content_frame)
+        content_text = ContentText(content_frame)
         content_scrollbar = tk.Scrollbar(content_frame)
         content_text.config(yscrollcommand=content_scrollbar.set)
         content_scrollbar.config(command=content_text.yview)
 
-        def test_insert(event_=None, var_=None):
-            content_text.insert(tk.INSERT, var_)
+        # def test_insert(event_=None, var_=None):
+        #     content_text.insert(tk.INSERT, var_)
+        #
+        # def test_replace(event_=None, var_=None):
+        #     content_text.insert(tk.INSERT, var_)
+        #
+        # def test_menu(event_=None):
+        #     print("right click")
+        #     m = tk.Menu(self.frame, tearoff=0)
+        #     ranges = content_text.tag_ranges(tk.SEL)
+        #     if ranges:
+        #         test = content_text.get(*ranges)
+        #         print(f'SELECTED Text is {test} in range {ranges}')
+        #         if test in pronoun_female.keys():
+        #             m.add_command(label=f"{test}", background="lightblue")
+        #             m.add_command(label=f"{pronoun_female[test]}")
+        #             m.add_command(label=f"{pronoun_male[test]}")
+        #             m.add_command(label=f"{pronoun_nonbinary[test]}")
+        #         # elif test in test_tags.keys():
+        #         #     m.add_command(label=f"{test_tags[test]}")
+        #         #     m.add_command(label=f"{test}", background="lightblue")
+        #         # m.add_separator()
+        #         # m.add_command(label="Replace selection menu here")
+        #         # m.add_separator()
+        #         # m.add_command(label="Info")
+        #     else:
+        #         print('NO Selected Text')
+        #         m.add_command(label="Insert test", command=lambda: test_insert(var_="Test"))
+        #         m.add_separator()
+        #         m.add_command(label="Insert menu here")
+        #         m.add_command(label="Like Link/skillgates")
+        #     try:
+        #         m.tk_popup(event_.x_root, event_.y_root)
+        #     finally:
+        #         m.grab_release()
 
-        def test_replace(event_=None, var_=None):
-            content_text.insert(tk.INSERT, var_)
 
-        def test_menu(event_=None):
-            print("right click")
-            m = tk.Menu(self.frame, tearoff=0)
-            ranges = content_text.tag_ranges(tk.SEL)
-            if ranges:
-                test = content_text.get(*ranges)
-                print(f'SELECTED Text is {test} in range {ranges}')
-                if test in pronoun_female.keys():
-                    m.add_command(label=f"{test}", background="lightblue")
-                    m.add_command(label=f"{pronoun_female[test]}")
-                    m.add_command(label=f"{pronoun_male[test]}")
-                    m.add_command(label=f"{pronoun_nonbinary[test]}")
-                # elif test in test_tags.keys():
-                #     m.add_command(label=f"{test_tags[test]}")
-                #     m.add_command(label=f"{test}", background="lightblue")
-                # m.add_separator()
-                # m.add_command(label="Replace selection menu here")
-                # m.add_separator()
-                # m.add_command(label="Info")
-            else:
-                print('NO Selected Text')
-                m.add_command(label="Insert test", command=lambda: test_insert(var_="Test"))
-                m.add_separator()
-                m.add_command(label="Insert menu here")
-                m.add_command(label="Like Link/skillgates")
-            try:
-                m.tk_popup(event_.x_root, event_.y_root)
-            finally:
-                m.grab_release()
-
-        content_text.bind("<Button-3>", test_menu)
+        sexy_menu = SexyRightClickMenu(self.frame, content_text)
+        content_text.bind("<Button-3>", sexy_menu.click)
 
         content_text.pack(side="left", fill="both", expand=True)
         content_scrollbar.pack(side="right", fill="y")
