@@ -24,7 +24,7 @@ class ContentText(tk.Text):
     def untranslate_text(self):
         """Convert translated text back to tagged format."""
         untranslated = self.get("1.0", tk.END)
-        for tag, replacement in pronoun_tags.items():
+        for tag, replacement in pronoun_tags.items():  # TODO; use tk.tag instead of tag
             untranslated = untranslated.replace(replacement, tag)
         return untranslated
 
@@ -35,9 +35,12 @@ class ContentText(tk.Text):
 
         if self.translate_var.get():
             # Show translated text
+            # self.apply_tags()  # TODO: remove if
             translated = self.translate_text()
             self.delete('1.0', tk.END)
             self.insert('1.0', translated)
+            self.apply_tags()
+
         else:
             # Show original text
             self.delete('1.0', tk.END)
@@ -59,3 +62,32 @@ class ContentText(tk.Text):
                 self.original_text = self.untranslate_text()
 
             self.edit_modified(False)
+
+    def apply_tags(self):
+        for tag, replacement in pronoun_tags.items():
+            self.highlight_pattern(replacement, "sexy_highlight")
+
+    def highlight_pattern(self, pattern, tag, start="1.0", end="end",
+                          regexp=False):
+        '''Apply the given tag to all text that matches the given pattern
+
+        If 'regexp' is set to True, pattern will be treated as a regular
+        expression according to Tcl's regular expression syntax.
+        '''
+
+        start = self.index(start)
+        end = self.index(end)
+        self.mark_set("matchStart", start)
+        self.mark_set("matchEnd", start)
+        self.mark_set("searchLimit", end)
+
+        count = tk.IntVar()
+        while True:
+            index = self.search(pattern, "matchEnd","searchLimit",
+                                count=count, regexp=regexp)
+            if index == "": break
+            if count.get() == 0: break # degenerate pattern which matches zero-length strings
+            self.mark_set("matchStart", index)
+            self.mark_set("matchEnd", "%s+%sc" % (index, count.get()))
+            self.tag_add(tag, "matchStart", "matchEnd")
+
