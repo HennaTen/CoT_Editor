@@ -1,31 +1,36 @@
 import tkinter as tk
-from app.data.cot_data import pronoun_tags
+from app.tools.json_convert import convert_dir_to_dict
 
 
 class ContentText(tk.Text):
+    # TODO: Add readonly "source" text. something that would show the original text in another tab
+    # TODO: Add a "restore to source" button
+    # TODO: Save changes to the original text (cache? File?)
     def __init__(self, root, *args, **kwargs):
         tk.Text.__init__(self, root, *args, **kwargs)
         self.original_text = self.get("1.0", tk.END)
         self.translate_var = tk.BooleanVar()
+        self.imported_tags = convert_dir_to_dict("config/translators")
 
         self.tag_config("sexy_highlight", background="green")
         self.tag_config("naughty_highlight", background="red")
 
         self.bind('<<Modified>>', self.on_text_modified)
 
-
     def translate_text(self):
         """Translate text by replacing tags with their corresponding values."""
         translated = self.get("1.0", tk.END)
-        for tag, replacement in pronoun_tags.items():
-            translated = translated.replace(tag, replacement)
+        for tags in self.imported_tags.values():
+            for tag, replacement in tags.items():
+                translated = translated.replace(tag, replacement)
         return translated
 
     def untranslate_text(self):
         """Convert translated text back to tagged format."""
         untranslated = self.get("1.0", tk.END)
-        for tag, replacement in pronoun_tags.items():  # TODO; use tk.tag instead of tag
-            untranslated = untranslated.replace(replacement, tag)
+        for tags in self.imported_tags.values():
+            for tag, replacement in tags.items(): # TODO: use tk.tag instead of tag
+                untranslated = untranslated.replace(replacement, tag)
         return untranslated
 
     def toggle_translation(self):
@@ -64,8 +69,9 @@ class ContentText(tk.Text):
             self.edit_modified(False)
 
     def apply_tags(self):
-        for tag, replacement in pronoun_tags.items():
-            self.highlight_pattern(replacement, "sexy_highlight")
+        for tags in self.imported_tags.values():
+            for tag, replacement in tags.items():
+                self.highlight_pattern(replacement, "sexy_highlight")
 
     def highlight_pattern(self, pattern, tag, start="1.0", end="end",
                           regexp=False):

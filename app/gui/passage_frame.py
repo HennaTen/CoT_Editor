@@ -3,6 +3,56 @@ from app.data.cot_data import pronoun_female, pronoun_male, pronoun_nonbinary
 from app.gui.elements.content_text import ContentText
 from app.gui.elements.right_click_menu import SexyRightClickMenu
 
+class PassageListbox(tk.Listbox):
+    def __init__(self, root, parser):
+        tk.Listbox.__init__(self, root, width=50, exportselection=False)
+        self.parser = parser
+        self.generate_passages_listbox()
+
+    def generate_passages_listbox(self, order=None):
+        bak_value = None
+        if self.curselection():
+            index = self.curselection()[0]
+            bak_value = self.get(index)
+
+        self.delete(0, 'end')
+        passages_list = self.parser.passages.get_keys()
+        if order == "alpha":
+            passages_list.sort()
+        for i, name in enumerate(passages_list):
+            if name in self.parser.script_parser.events:
+                self.insert(i, name + " ---EVENT")
+            else:
+                self.insert(i, name)
+
+        if bak_value:
+            new_index = self.get(0, "end").index(bak_value)
+            self.selection_set(new_index)
+
+
+class PassageListFrame(tk.Frame):
+    def __init__(self, root, parser, **kwargs):
+        tk.Frame.__init__(self, root, **kwargs)
+        self.parser = parser
+        self.passages_listbox = PassageListbox(self, self.parser)
+        self.passages_listbox.generate_passages_listbox()
+        scrollbar = tk.Scrollbar(self)
+        self.passages_listbox.config(yscrollcommand=scrollbar.set)
+        scrollbar.config(command=self.passages_listbox.yview)
+
+        passages_list_buttons = tk.Frame(self)
+        natural_order_button = tk.Button(passages_list_buttons, text="Normal order",
+                                         command=self.passages_listbox.generate_passages_listbox)
+        alpha_order_button = tk.Button(passages_list_buttons, text="Alphabetical order",
+                                       command=lambda: self.passages_listbox.generate_passages_listbox("alpha"))
+
+        natural_order_button.pack(side="left")
+        alpha_order_button.pack(side="left")
+        passages_list_buttons.pack(side="bottom", fill="x")
+        self.passages_listbox.pack(side="left", fill="y")
+        scrollbar.pack(side="right", fill="y")
+
+
 class PassageFrame:
     def __init__(self, root, parser):
         self.frame = tk.Frame(root)
@@ -14,80 +64,9 @@ class PassageFrame:
         self.frame.pack(fill='both', expand=True)
 
     def setup_passages(self):  # TODO: Reorganize THAT
-        left_panel = tk.Frame(self.frame, relief=tk.GROOVE)
+        left_panel = PassageListFrame(self.frame, self.parser, relief=tk.GROOVE)
         middle_panel = tk.Frame(self.frame, relief=tk.GROOVE)
         right_panel = tk.Frame(self.frame, relief=tk.GROOVE)
-
-        # LEFT
-        passages_listbox = tk.Listbox(left_panel, width=50, exportselection=False)
-
-        def generate_passages_listbox(order=None):
-            bak_value = None
-            if passages_listbox.curselection():
-                index = passages_listbox.curselection()[0]
-                bak_value = passages_listbox.get(index)
-
-            passages_listbox.delete(0, 'end')
-            passages_list = self.parser.passages.get_keys()
-            if order == "alpha":
-                passages_list.sort()
-            for i, name in enumerate(passages_list):
-                if name in self.parser.script_parser.events:
-                    passages_listbox.insert(i, name + " ---EVENT")
-                else:
-                    passages_listbox.insert(i, name)
-
-            if bak_value:
-                new_index = passages_listbox.get(0, "end").index(bak_value)
-                print(f"index {new_index} for {passages_listbox.get(new_index)}")
-                passages_listbox.selection_set(new_index)
-
-        generate_passages_listbox()
-
-        def selection_changed(event_):
-            index = int(passages_listbox.curselection()[0])
-            value = passages_listbox.get(index)
-            selected = value.split(" ")[0]
-            print(selected)
-            passage = self.parser.passages[selected]
-            pid_text.delete(1.0, tk.END)
-            pid_text.insert(tk.END, passage.pid)
-            name_text.delete(1.0, tk.END)
-            name_text.insert(tk.END, passage.name)
-            tag_text.delete(1.0, tk.END)
-            tag_text.insert(tk.END, passage.tags)
-            content_text.delete(1.0, tk.END)
-            content_text.insert(tk.END, passage.content)
-
-            event_passage.config(text="")
-            event_tags.delete(1.0, tk.END)
-            event_frequency.delete(1.0, tk.END)
-            event_additional_tags.delete(1.0, tk.END)
-            if selected in self.parser.script_parser.events:
-                event_passage.config(text=self.parser.script_parser.events[selected].passage)
-                event_tags.insert(tk.END, self.parser.script_parser.events[selected].tags)
-                event_frequency.insert(tk.END, self.parser.script_parser.events[selected].frequency)
-                event_additional_tags.insert(tk.END, self.parser.script_parser.events[selected].additional_tags)
-            escape_button["state"] = "active"
-            full_escape_button["state"] = "active"
-
-        passages_listbox.bind("<<ListboxSelect>>", selection_changed)
-
-        scrollbar = tk.Scrollbar(left_panel)
-        passages_listbox.config(yscrollcommand=scrollbar.set)
-        scrollbar.config(command=passages_listbox.yview)
-
-        passages_list_buttons = tk.Frame(left_panel)
-        natural_order_button = tk.Button(passages_list_buttons, text="Normal order", command=generate_passages_listbox)
-        alpha_order_button = tk.Button(passages_list_buttons,
-                                       text="Alphabetical order", command=lambda: generate_passages_listbox("alpha"))
-
-        natural_order_button.pack(side="left")
-        alpha_order_button.pack(side="left")
-        passages_list_buttons.pack(side="bottom", fill="x")
-        passages_listbox.pack(side="left", fill="y")
-        scrollbar.pack(side="right", fill="y")
-        # END_LEFT
 
         # MIDDLE
         head_frame = tk.Frame(middle_panel)
@@ -154,7 +133,6 @@ class PassageFrame:
         #     finally:
         #         m.grab_release()
 
-
         sexy_menu = SexyRightClickMenu(self.frame, content_text)
         content_text.bind("<Button-3>", sexy_menu.click)
 
@@ -162,10 +140,10 @@ class PassageFrame:
         content_scrollbar.pack(side="right", fill="y")
 
         def escape(full=None):
-            index = int(passages_listbox.curselection()[0])
-            value = passages_listbox.get(index)
+            index = int(left_panel.passages_listbox.curselection()[0])
+            value = left_panel.passages_listbox.get(index)
             selected = value.split(" ")[0]
-            text = content_text.original_text  # get("1.0", tk.END) # TODO: Check if ok
+            text = content_text.original_text
             additional_data = None
             if full:
                 additional_data = {
@@ -191,6 +169,39 @@ class PassageFrame:
         content_frame.pack(side="top", fill="both", expand=True)
         end_label.pack(side="top")
         passage_buttons_frame.pack(side="bottom", fill="x")
+
+        def selection_changed(event_):
+            index = int(left_panel.passages_listbox.curselection()[0])
+            value = left_panel.passages_listbox.get(index)
+            selected = value.split(" ")[0]
+            print(selected)
+            passage = self.parser.passages[selected]
+            pid_text.delete(1.0, tk.END)
+            pid_text.insert(tk.END, passage.pid)
+            name_text.delete(1.0, tk.END)
+            name_text.insert(tk.END, passage.name)
+            tag_text.delete(1.0, tk.END)
+            tag_text.insert(tk.END, passage.tags)
+            content_text.delete(1.0, tk.END)
+            content_text.insert(tk.END, passage.content)
+            # If translation is enabled, apply it
+            if content_text.translate_var.get():
+                content_text.toggle_translation()
+
+            event_passage.config(text="")
+            event_tags.delete(1.0, tk.END)
+            event_frequency.delete(1.0, tk.END)
+            event_additional_tags.delete(1.0, tk.END)
+            if selected in self.parser.script_parser.events:
+                event_passage.config(text=self.parser.script_parser.events[selected].passage)
+                event_tags.insert(tk.END, self.parser.script_parser.events[selected].tags)
+                event_frequency.insert(tk.END, self.parser.script_parser.events[selected].frequency)
+                event_additional_tags.insert(tk.END, self.parser.script_parser.events[selected].additional_tags)
+            escape_button["state"] = "active"
+            full_escape_button["state"] = "active"
+
+
+        left_panel.passages_listbox.bind("<<ListboxSelect>>", selection_changed)
         # END_MIDDLE
 
         # RIGHT

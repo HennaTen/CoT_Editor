@@ -1,5 +1,4 @@
 import tkinter as tk
-from app.data.cot_data import pronoun_tags
 
 def rgb(r, g, b):
     return f"#{r:02x}{g:02x}{b:02x}"
@@ -64,6 +63,7 @@ class SexyRightClickMenu:
         self.content_text = content_text
         self.menu = None
         self.selection = None
+        self.ranges = None
         self.submenu = {
             "color": MenuColorEffect(self.root, self.selection)
         }
