@@ -12,7 +12,7 @@ class ContentText(tk.Text):
         self.translate_var = tk.BooleanVar()
         self.imported_tags = convert_dir_to_dict("config/translators")
 
-        self.tag_config("sexy_highlight", background="green")
+        self.tag_config("sexy_highlight", background="lightblue")
         self.tag_config("naughty_highlight", background="red")
 
         self.bind('<<Modified>>', self.on_text_modified)
