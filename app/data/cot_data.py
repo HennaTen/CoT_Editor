@@ -1,4 +1,5 @@
-# For now, raw data are stored inside lists.
+# Shouldn't be used in the code, but it's here for reference
+from app.tools.color import rgb
 
 event_tags = [
     'prereq',  # the given event (identified by story passage) must have happened first
@@ -193,6 +194,29 @@ pronoun_tags = {
     "<<pssc>>": "He's|She's|They're",
     "<<pshas>>": "he's|she's|they've",
     "<<pshasc>>": "He's|She's|They've",
+}
+
+color_classes = {
+    "sexy": rgb(196, 76, 142),
+    "romantic": rgb(245, 65, 89),
+    "festive": rgb(202, 58, 94),
+    "gold": rgb(216, 219, 29),  # Not used as <<highlight>> ?
+    "mainskill": rgb(179, 40, 116),
+    "otherskill": rgb(119, 191, 224),
+    "decreaseneed": rgb(194, 51, 32),
+    "increaseneed": rgb(57, 160, 26),
+    "equalneed": rgb(102, 108, 109),
+    "pee": rgb(221, 209, 101),
+    "cash": rgb(58, 148, 66),
+    "notice": rgb(108, 208, 226),
+    "noticedark": rgb(66, 131, 143),
+    "bad": rgb(190, 10, 10),
+    "ungood": rgb(187, 190, 10),
+    "unbad": rgb(118, 226, 108),
+    "female": rgb(255, 0, 255),
+    "male": rgb(0, 0, 255),
+    "nonbinary": rgb(0, 255, 255),
+    "glow": "#fff",
 }
 
 """

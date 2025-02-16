@@ -1,15 +1,16 @@
 import tkinter as tk
+from app.tools.json_convert import convert_dir_to_dict, convert_to_dict, convert_to_json
 
-def rgb(r, g, b):
-    return f"#{r:02x}{g:02x}{b:02x}"
 
-class AbstractSubmenu:
+
+class Submenu:
     menu_elements = {}
 
     def __init__(self, root, selected):
         self.root = root
         self.menu = tk.Menu(self.root, tearoff=0)
         self.selected = None
+        self.items = None
         # self.update(selected)
 
 
@@ -17,44 +18,30 @@ class AbstractSubmenu:
         self.selected = selected
 
 
-class MenuColorEffect(AbstractSubmenu):
-    color_classes = {
-        "sexy": rgb(196, 76, 142),
-        "romantic":  rgb(245, 65, 89),
-        "festive":  rgb(202, 58, 94),
-        "gold":  rgb(216, 219, 29), # Not used as <<highlight>> ?
-        "mainskill":  rgb(179, 40, 116),
-        "otherskill":  rgb(119, 191, 224),
-        "decreaseneed":  rgb(194, 51, 32),
-        "increaseneed":  rgb(57, 160, 26),
-        "equalneed":  rgb(102, 108, 109),
-        "pee":  rgb(221, 209, 101),
-        "cash":  rgb(58, 148, 66),
-        "notice":  rgb(108, 208, 226),
-        "noticedark":  rgb(66, 131, 143),
-        "bad":  rgb(190, 10, 10),
-        "ungood":  rgb(187, 190, 10),
-        "unbad":  rgb(118, 226, 108),
-        "female":  rgb(255, 0, 255),
-        "male": rgb(0, 0, 255),
-        "nonbinary":  rgb(0, 255, 255),
-        "glow":  "#fff",
-    }
-
+class MenuColorEffect(Submenu):
     def __init__(self, root, selected):
-        AbstractSubmenu.__init__(self, root, selected)
+        Submenu.__init__(self, root, selected)
+
 
     def update(self, selected, ranges, content_text, event=None):
         self.selected = selected
         self.menu.delete(0, tk.END)
-        for key in self.color_classes.keys():
+        # Check if config/containers/color_classes.json exists and use it, else use app.data.cot_data.color_classes
+        try:
+            self.items = convert_to_dict("config/containers/color_classes.json")
+            print("Using color_classes.json")
+        except FileNotFoundError:
+            from app.data.cot_data import color_classes
+            self.items = color_classes
+            print("Using color_classes from cot_data")
+
+        for key in self.items.keys():
 
             def replace(color_name):
                 content_text.replace(*ranges, f"<<highlight {color_name}>>{self.selected}<</highlight>>")
 
-            color = self.color_classes[key]
+            color = self.items[key]
             self.menu.add_command(label=key, background=color, command=lambda x=key: replace(x))
-
 
 
 class SexyRightClickMenu:

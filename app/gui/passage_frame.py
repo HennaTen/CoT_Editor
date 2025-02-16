@@ -18,7 +18,7 @@ class PassageFrame:
         self.setup_passages()
         self.frame.pack(fill='both', expand=True)
 
-    def setup_passages(self):  # TODO: Reorganize THAT
+    def setup_passages(self):
         self.passage_list_frame.passages_listbox.bind("<<ListboxSelect>>", self.selection_changed)
 
         self.passage_list_frame.pack(side='left', fill='y', padx=10, pady=5, expand=True)

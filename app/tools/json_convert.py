@@ -8,7 +8,8 @@ from app.data.cot_data import pronoun_tags
 def convert_to_json(data, dest=Path("config/sample.json")):
     print(dest)
     # if destination folder does not exist, create it
-    dest.parent.mkdir(parents=True, exist_ok=True)
+    if not os.path.exists(dest.parent):
+        os.makedirs(dest.parent)
     with open(dest, "w") as outfile:
         json.dump(data, outfile, indent=4)
 
