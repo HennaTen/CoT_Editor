@@ -6,8 +6,5 @@
   "Bold": {
     "begin": "<b>",
     "end": "</b>"
-  },
-  "Back to line": {
-    "begin": "<br>"
   }
 }

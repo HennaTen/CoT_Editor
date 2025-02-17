@@ -5,40 +5,42 @@ from app.tools.json_convert import convert_dir_to_dict, convert_to_dict, convert
 class Submenu:
     menu_elements = {}
 
-    def __init__(self, root, items=None, items_dir=None):
+    def __init__(self, root, items):
         self.root = root
         self.menu = tk.Menu(self.root, tearoff=0)
         self.items = items
-
-        if items_dir:
-            try:
-                print(f"Using {items_dir}")
-                self.items = convert_to_dict(items_dir)
-            except FileNotFoundError:
-                print(f"Error loading {items_dir}")
 
 
 class InsertsMenu(Submenu):
     def __init__(self, root, items, func):
         Submenu.__init__(self, root, items=items)
         for key in self.items.keys():
-            self.menu.add_command(label=key, command=lambda x=self.items[key]: func(var_=x))
+            begin_ = self.items[key]["begin"]
+            if "end" in self.items[key]:
+                begin_ += self.items[key]["end"]
+            if "background" in self.items[key]:
+                background = self.items[key]["background"]
+                self.menu.add_command(label=key, background=background, command=lambda begin=begin_: func(var_=begin_))
+            else:
+                self.menu.add_command(label=key, command=lambda begin=begin_: func(var_=begin))
 
 
-class MenuColorEffect(Submenu):
+class ContainersMenu(Submenu):
     def __init__(self, root, func, items=None, items_dir=None):
-        Submenu.__init__(self, root, items_dir=items_dir)
-        if not self.items:
-            from app.data.cot_data import color_classes
-            self.items = color_classes
-            print("Using color_classes from cot_data")
+        Submenu.__init__(self, root, items=items)
 
-        begin = "<<highlight "
-        middle = ">>"
-        end = "<</highlight>>"
         for key in self.items.keys():
-            color = self.items[key]
-            self.menu.add_command(label=key, background=color, command=lambda x=key: func(x, begin, middle, end))
+            begin_ = self.items[key]["begin"]
+            end_ = self.items[key]["end"]
+            if "background" in self.items[key]:
+                background = self.items[key]["background"]
+                print(f"color: {background}")
+                self.menu.add_command(label=key, background=background,
+                                      command=lambda begin=begin_, end=end_: func(begin, end))
+            else:
+                print(f"no color: {key}")
+                self.menu.add_command(label=key,
+                                      command=lambda begin=begin_, end=end_: func(begin, end))
 
 
 class SexyRightClickMenu:
@@ -47,9 +49,12 @@ class SexyRightClickMenu:
         self.content_text = content_text
         self.menu = None
         self.ranges = None
-        self.replace_submenu = {
-            "color": MenuColorEffect(self.root, items_dir="config/containers/highlight.json", func=self.replace),
-        }
+        self.container_submenu = {}
+        containers = convert_dir_to_dict("config/containers")
+        for item_name in containers.keys():
+            items = containers[item_name]
+            self.container_submenu[item_name] = ContainersMenu(self.root, items=items, func=self.replace)
+
 
         self.insert_submenus = {}
         inserts = convert_dir_to_dict("config/inserts")
@@ -77,8 +82,8 @@ class SexyRightClickMenu:
 
     def menu_selection(self, event=None):
         print("menu selection")
-        for key in self.replace_submenu.keys():
-            self.menu.add_cascade(label=key, menu=self.replace_submenu[key].menu)
+        for key in self.container_submenu.keys():
+            self.menu.add_cascade(label=key, menu=self.container_submenu[key].menu)
 
     def menu_insert(self, event=None):
         print("menu insert")
@@ -88,7 +93,7 @@ class SexyRightClickMenu:
     def insert(self, var_=None):
         self.content_text.insert(tk.INSERT, var_)
 
-    def replace(self, var_, begin="<<", middle= "", end=">>"):
+    def replace(self, begin, end):
         ranges = self.content_text.tag_ranges(tk.SEL)
         selection = self.content_text.get(*self.ranges)
-        self.content_text.replace(*ranges, f"{begin}{var_}{middle}{selection}{end}")
+        self.content_text.replace(*ranges, f"{begin}{selection}{end}")

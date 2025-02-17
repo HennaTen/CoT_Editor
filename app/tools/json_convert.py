@@ -1,7 +1,7 @@
 import json
 import os
 from pathlib import Path
-from app.data.cot_data import pronoun_tags
+# from app.data.cot_data import pronoun_tags
 
 
 # Convert dictionary to JSON object

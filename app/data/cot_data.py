@@ -1,5 +1,7 @@
 # Shouldn't be used in the code, but it's here for reference
 from app.tools.color import rgb
+from app.tools.json_convert import convert_to_json
+from pathlib import Path
 
 event_tags = [
     'prereq',  # the given event (identified by story passage) must have happened first
@@ -197,26 +199,106 @@ pronoun_tags = {
 }
 
 color_classes = {
-    "sexy": rgb(196, 76, 142),
-    "romantic": rgb(245, 65, 89),
-    "festive": rgb(202, 58, 94),
-    "gold": rgb(216, 219, 29),  # Not used as <<highlight>> ?
-    "mainskill": rgb(179, 40, 116),
-    "otherskill": rgb(119, 191, 224),
-    "decreaseneed": rgb(194, 51, 32),
-    "increaseneed": rgb(57, 160, 26),
-    "equalneed": rgb(102, 108, 109),
-    "pee": rgb(221, 209, 101),
-    "cash": rgb(58, 148, 66),
-    "notice": rgb(108, 208, 226),
-    "noticedark": rgb(66, 131, 143),
-    "bad": rgb(190, 10, 10),
-    "ungood": rgb(187, 190, 10),
-    "unbad": rgb(118, 226, 108),
-    "female": rgb(255, 0, 255),
-    "male": rgb(0, 0, 255),
-    "nonbinary": rgb(0, 255, 255),
-    "glow": "#fff",
+    "sexy": {
+        "begin": "<<highlight sexy>>",
+        "end": "<</highlight>>",
+        "background":rgb(196, 76, 142)
+    },
+    "romantic": {
+        "begin": "<<highlight romantic>>",
+        "end": "<</highlight>>",
+        "background": rgb(245, 65, 89)
+    },
+    "festive": {
+        "begin": "<<highlight festive>>",
+        "end": "<</highlight>>",
+        "background": rgb(202, 58, 94)
+    },
+    "gold": {
+        "begin": "<<highlight gold>>",
+        "end": "<</highlight>>",
+        "background": rgb(216, 219, 29)
+    },
+    "mainskill": {
+        "begin": "<<highlight mainskill>>",
+        "end": "<</highlight>>",
+        "background": rgb(179, 40, 116)
+    },
+    "otherskill": {
+        "begin": "<<highlight otherskill>>",
+        "end": "<</highlight>>",
+        "background": rgb(119, 191, 224)
+    },
+    "decreaseneed": {
+        "begin": "<<highlight decreaseneed>>",
+        "end": "<</highlight>>",
+        "background": rgb(194, 51, 32)
+    },
+    "increaseneed": {
+        "begin": "<<highlight increaseneed>>",
+        "end": "<</highlight>>",
+        "background": rgb(57, 160, 26)
+    },
+    "equalneed": {
+        "begin": "<<highlight equalneed>>",
+        "end": "<</highlight>>",
+        "background": rgb(102, 108, 109)
+    },
+    "pee": {
+        "begin": "<<highlight pee>>",
+        "end": "<</highlight>>",
+        "background": rgb(221, 209, 101)
+    },
+    "cash": {
+        "begin": "<<highlight cash>>",
+        "end": "<</highlight>>",
+        "background": rgb(58, 148, 66)
+    },
+    "notice": {
+        "begin": "<<highlight notice>>",
+        "end": "<</highlight>>",
+        "background": rgb(108, 208, 226)
+    },
+    "noticedark": {
+        "begin": "<<highlight noticedark>>",
+        "end": "<</highlight>>",
+        "background": rgb(66, 131, 143)
+    },
+    "bad": {
+        "begin": "<<highlight bad>>",
+        "end": "<</highlight>>",
+        "background": rgb(190, 10, 10)
+    },
+    "ungood": {
+        "begin": "<<highlight ungood>>",
+        "end": "<</highlight>>",
+        "background": rgb(187, 190, 10)
+    },
+    "unbad": {
+        "begin": "<<highlight unbad>>",
+        "end": "<</highlight>>",
+        "background": rgb(118, 226, 108)
+    },
+    "female": {
+        "begin": "<<highlight female>>",
+        "end": "<</highlight>>",
+        "background": rgb(255, 0, 255)
+    },
+    "male": {
+        "begin": "<<highlight male>>",
+        "end": "<</highlight>>",
+        "background": rgb(0, 0, 255)
+    },
+    "nonbinary": {
+        "begin": "<<highlight nonbinary>>",
+        "end": "<</highlight>>",
+        "background": rgb(0, 255, 255)
+    },
+    "glow": {
+        "begin": "<<highlight glow>>",
+        "end": "<</highlight>>",
+        "background": "#fff"
+    },
 }
 
 """
@@ -234,3 +316,6 @@ sir: if masc sir, if femme ma'am, else boss
 master: master
 pcpetnamefrom: if masc handsome, if femme girl, else sexy, unless age gte 40 if masc handsome, else honey
 """
+
+if __name__ == '__main__':
+    convert_to_json(color_classes, Path("../../config/containers/highlight.json"))
