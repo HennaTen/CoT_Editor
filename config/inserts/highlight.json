@@ -1,0 +1,102 @@
+{
+    "sexy": {
+        "begin": "<<highlight sexy>>",
+        "end": "<</highlight>>",
+        "background": "#c44c8e"
+    },
+    "romantic": {
+        "begin": "<<highlight romantic>>",
+        "end": "<</highlight>>",
+        "background": "#f54159"
+    },
+    "festive": {
+        "begin": "<<highlight festive>>",
+        "end": "<</highlight>>",
+        "background": "#ca3a5e"
+    },
+    "gold": {
+        "begin": "<<highlight gold>>",
+        "end": "<</highlight>>",
+        "background": "#d8db1d"
+    },
+    "mainskill": {
+        "begin": "<<highlight mainskill>>",
+        "end": "<</highlight>>",
+        "background": "#b32874"
+    },
+    "otherskill": {
+        "begin": "<<highlight otherskill>>",
+        "end": "<</highlight>>",
+        "background": "#77bfe0"
+    },
+    "decreaseneed": {
+        "begin": "<<highlight decreaseneed>>",
+        "end": "<</highlight>>",
+        "background": "#c23320"
+    },
+    "increaseneed": {
+        "begin": "<<highlight increaseneed>>",
+        "end": "<</highlight>>",
+        "background": "#39a01a"
+    },
+    "equalneed": {
+        "begin": "<<highlight equalneed>>",
+        "end": "<</highlight>>",
+        "background": "#666c6d"
+    },
+    "pee": {
+        "begin": "<<highlight pee>>",
+        "end": "<</highlight>>",
+        "background": "#ddd165"
+    },
+    "cash": {
+        "begin": "<<highlight cash>>",
+        "end": "<</highlight>>",
+        "background": "#3a9442"
+    },
+    "notice": {
+        "begin": "<<highlight notice>>",
+        "end": "<</highlight>>",
+        "background": "#6cd0e2"
+    },
+    "noticedark": {
+        "begin": "<<highlight noticedark>>",
+        "end": "<</highlight>>",
+        "background": "#42838f"
+    },
+    "bad": {
+        "begin": "<<highlight bad>>",
+        "end": "<</highlight>>",
+        "background": "#be0a0a"
+    },
+    "ungood": {
+        "begin": "<<highlight ungood>>",
+        "end": "<</highlight>>",
+        "background": "#bbbe0a"
+    },
+    "unbad": {
+        "begin": "<<highlight unbad>>",
+        "end": "<</highlight>>",
+        "background": "#76e26c"
+    },
+    "female": {
+        "begin": "<<highlight female>>",
+        "end": "<</highlight>>",
+        "background": "#ff00ff"
+    },
+    "male": {
+        "begin": "<<highlight male>>",
+        "end": "<</highlight>>",
+        "background": "#0000ff"
+    },
+    "nonbinary": {
+        "begin": "<<highlight nonbinary>>",
+        "end": "<</highlight>>",
+        "background": "#00ffff"
+    },
+    "glow": {
+        "begin": "<<highlight glow>>",
+        "end": "<</highlight>>",
+        "background": "#fff"
+    }
+}

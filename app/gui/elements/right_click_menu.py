@@ -28,7 +28,7 @@ class InsertsMenu(Submenu):
 class ContainersMenu(Submenu):
     def __init__(self, root, func, items=None, items_dir=None):
         Submenu.__init__(self, root, items=items)
-
+        print(f"items: {items}")
         for key in self.items.keys():
             begin_ = self.items[key]["begin"]
             if "end" in self.items[key]:
