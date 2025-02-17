@@ -22,7 +22,7 @@ class InsertsMenu(Submenu):
     def __init__(self, root, items, func):
         Submenu.__init__(self, root, items=items)
         for key in self.items.keys():
-            self.menu.add_command(label=key, command=lambda x=key: func(var_=x))
+            self.menu.add_command(label=key, command=lambda x=self.items[key]: func(var_=x))
 
 
 class MenuColorEffect(Submenu):

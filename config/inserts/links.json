@@ -1,0 +1,5 @@
+{
+  "Link": "<<link \"TEXT\" NEXT_PASSAGE_NAME>>ACTIONS<</link>>",
+  "Skillgate": "<<skillgate SKILL SKILL_LEVEL \"TEXT\" NEXT_PASSAGE_NAME>>ACTIONS<</skillgate>>",
+  "Back": "[[Back|PASSAGE_NAME]]"
+}
