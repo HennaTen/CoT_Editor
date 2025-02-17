@@ -19,21 +19,20 @@ class PassageFrame:
         self.frame.pack(fill='both', expand=True)
 
     def setup_passages(self):
-        self.passage_list_frame.passages_listbox.bind("<<ListboxSelect>>", self.selection_changed)
+        self.passage_list_frame.passages_list_tree.bind("<<TreeviewSelect>>", self.selection_changed)
 
         self.passage_list_frame.pack(side='left', fill='y', padx=10, pady=5, expand=True)
         self.content_frame.pack(side="left", fill='both', expand=True)
         self.event_frame.pack(side="left", fill='y', expand=True)
 
-    def selection_changed(self, event_):
-        index = int(self.passage_list_frame.passages_listbox.curselection()[0])
-        value = self.passage_list_frame.passages_listbox.get(index)
-        selected = value.split(" ")[0]
-        print(selected)
+    def selection_changed(self, event):
+        iid = self.passage_list_frame.passages_list_tree.selection()[0]
+        _, selected, is_event = self.passage_list_frame.passages_list_tree.item(iid)['values']
+
         passage = self.parser.passages[selected]
 
         self.content_frame.update_elements(passage)
-        if selected in self.parser.script_parser.events:
+        if is_event:
             self.event_frame.update_event_data(self.parser.script_parser.events[selected])
         else:
             self.event_frame.update_event_data(None)

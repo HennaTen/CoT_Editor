@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import filedialog
+from tkinter import filedialog, ttk
 from app.parser.cot_parser import CoTParser
 from app.gui.passage_frame import PassageFrame
 
@@ -11,9 +11,12 @@ class MainGUI:
         self.root.state('zoomed')
 
         self.parser = CoTParser(path)
+        tabControl = ttk.Notebook(self.root)
         self.elements = {
-            "passage_frame": PassageFrame(self.root, self.parser)
+            "passage_frame": PassageFrame(tabControl, self.parser)
         }
+        tabControl.add(self.elements["passage_frame"].frame, text='Passages')
+        tabControl.pack(expand=1, fill="both")
         # self.setup_ui()  # TODO: Not implemented
 
     def setup_ui(self):  # TODO: Not implemented

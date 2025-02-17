@@ -56,8 +56,8 @@ class ContentFrame(tk.Frame):
         d.pack()
 
     def escape(self, left_panel, parser, full=None):
-        index = int(left_panel.passages_listbox.curselection()[0])
-        value = left_panel.passages_listbox.get(index)
+        index = int(left_panel.passages_list_tree.curselection()[0])
+        value = left_panel.passages_list_tree.get(index)
         selected = value.split(" ")[0]
         text = self.content_text.original_text
         additional_data = None
