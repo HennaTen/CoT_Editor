@@ -31,7 +31,10 @@ class ContainersMenu(Submenu):
 
         for key in self.items.keys():
             begin_ = self.items[key]["begin"]
-            end_ = self.items[key]["end"]
+            if "end" in self.items[key]:
+                end_ = self.items[key]["end"]
+            else:
+                end_ = ""
             if "background" in self.items[key]:
                 background = self.items[key]["background"]
                 print(f"color: {background}")
