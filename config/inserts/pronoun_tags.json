@@ -1,0 +1,94 @@
+{
+    "He|She|They":
+    {
+        "begin": "<<psc>>"
+    },
+    "Him|Her|Them":
+    {
+        "begin": "<<poc>>"
+    },
+    "His|Her|Their":
+    {
+        "begin": "<<ppc>>"
+    },
+    "Himself|Herself|Themself":
+    {
+        "begin": "<<prc>>"
+    },
+    "His|Hers|Theirs":
+    {
+        "begin": "<<pqc>>"
+    },
+    "he|she|they":
+    {
+        "begin": "<<ps>>"
+    },
+    "him|her|them":
+    {
+        "begin": "<<po>>"
+    },
+    "his|her|their":
+    {
+        "begin": "<<pp>>"
+    },
+    "himself|herself|themself":
+    {
+        "begin": "<<pr>>"
+    },
+    "his|hers|theirs":
+    {
+        "begin": "<<pq>>"
+    },
+    "man|woman|person":
+    {
+        "begin": "<<noun>>"
+    },
+    "boy|girl|kid":
+    {
+        "begin": "<<youngnoun>>"
+    },
+    "guy|girl|kid":
+    {
+        "begin": "<<casualnoun>>"
+    },
+    "Mr.|Mrs.|Mx.":
+    {
+        "begin": "<<mrs>>"
+    },
+    "Mr.|Miss|Mx":
+    {
+        "begin": "<<miss>>"
+    },
+    "Mr.|Ms.|Mx.":
+    {
+        "begin": "<<ms>>"
+    },
+    "boyfriend|girlfriend|partner":
+    {
+        "begin": "<<partner>>"
+    },
+    "husband|wife|spouse":
+    {
+        "begin": "<<spouse>>"
+    },
+    "Master|Mistress|Master":
+    {
+        "begin": "<<master>>"
+    },
+    "he's|she's|they're":
+    {
+        "begin": "<<pss>>"
+    },
+    "He's|She's|They're":
+    {
+        "begin": "<<pssc>>"
+    },
+    "he's|she's|they've":
+    {
+        "begin": "<<pshas>>"
+    },
+    "He's|She's|They've":
+    {
+        "begin": "<<pshasc>>"
+    }
+}

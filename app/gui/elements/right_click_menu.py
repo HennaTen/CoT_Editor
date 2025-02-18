@@ -55,6 +55,7 @@ class SexyRightClickMenu:
         self.container_submenu = {}
         containers = convert_dir_to_dict("config/containers")
         for item_name in containers.keys():
+            print(f"container item_name: {item_name}")
             items = containers[item_name]
             self.container_submenu[item_name] = ContainersMenu(self.root, items=items, func=self.replace)
 
@@ -62,6 +63,7 @@ class SexyRightClickMenu:
         self.insert_submenus = {}
         inserts = convert_dir_to_dict("config/inserts")
         for item_name in inserts.keys():
+            print(f"insert item_name: {item_name}")
             items = inserts[item_name]
             self.insert_submenus[item_name] = InsertsMenu(self.root, items=items, func=self.insert)
 
