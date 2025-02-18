@@ -18,7 +18,7 @@ class TWPassageData:
             escaped = html.escape(text)
 
         if data:
-            open_tag = (f'<tw-passagedata pid="{data["pid"]}" name="{data["name"]}" tags="{data["tags"]}" '
+            open_tag = (f'<tw-passagedata pid="{data["pid"].rstrip()}" name="{data["name"].rstrip()}" tags="{data["tags"].rstrip()}" '
                         f'position="{self.position}" size="{self.size}">')
             close_tag = "</tw-passagedata>"
             print(f"{open_tag}{escaped}{close_tag}")
