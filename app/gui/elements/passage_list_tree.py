@@ -7,19 +7,15 @@ class PassageListTree(ttk.Treeview):
         columns = ("Id", "Passages", "Is Event")
         ttk.Treeview.__init__(self, root, columns=columns)
         self['show'] = 'headings'
-        self.heading("Id", text="Id")
-        self.heading("Passages", text="Passages")
-        self.heading("Is Event", text="Is Event")
+        self.heading("Id", text="Id", command=lambda: self.sort("Id", False))
+        self.heading("Passages", text="Passages", command=lambda: self.sort("Passages", False))
+        self.heading("Is Event", text="Is Event", command=lambda: self.sort("Is Event", False))
         self.column("Id", width=35)
         self.column("Passages", width=250)
         self.column("Is Event", width=45)
 
         self.parser = parser
         self.generate_tree()
-
-        for col in columns:
-            self.heading(col, text=col,
-                             command=lambda c=col: self.sort(c, False))
 
     def generate_tree(self):
         passages_list = self.parser.passages.get_keys()
