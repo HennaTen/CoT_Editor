@@ -13,14 +13,14 @@ class ContentData:
             "event": event
         }
 
-        self.pid = pid
-        self.name = name
-        self.tags = tags
+        self.pid = tk.StringVar(value=pid)
+        self.name = tk.StringVar(value=name)
+        self.tags = tk.StringVar(value=" ".join(tags))
         self.text = text
         self.event = event
 
     def get_header(self):
-        return (f'<tw-passagedata pid="{self.pid}" name="{self.name}" tags="{self.tags}" '
+        return (f'<tw-passagedata pid="{self.pid.get()}" name="{self.name.get()}" tags="{self.tags.get()}" '
                 f'position="{self.original["position"]}" size="{self.original["size"]}">')
 
     @classmethod
@@ -40,7 +40,6 @@ class ContentData:
 
     def escape(self, data=False):
         escaped = html.escape(self.text)
-
         if data:
             open_tag = self.get_header()
             close_tag = self.get_footer()

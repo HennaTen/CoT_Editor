@@ -64,10 +64,10 @@ class ContentFrame(tk.Frame):
         self.buttons_elements["translate_checkbox"] = translate_checkbox
 
         self.buttons_elements["escape_button"] = tk.Button(self.passage_buttons_frame, text="Copy escaped text",
-                                       command=lambda: self.escape(left_panel, passages_data))
+                                       command=lambda: self.escape(passages_data))
         self.buttons_elements["escape_button"]["state"] = "disabled"
         self.buttons_elements["full_escape_button"] = tk.Button(self.passage_buttons_frame, text="Copy whole tw-passagedata",
-                                            command=lambda: self.escape(left_panel, passages_data, full=True))
+                                            command=lambda: self.escape(full=True))
         self.buttons_elements["full_escape_button"]["state"] = "disabled"
 
         self.buttons_elements["translate_checkbox"].grid(column=0, row=0)
@@ -75,13 +75,14 @@ class ContentFrame(tk.Frame):
         self.buttons_elements["full_escape_button"].grid(column=2, row=0)
 
     def update_elements(self, passage):
-        self.head_elements["pid_text"].delete(0, tk.END)
-        self.head_elements["pid_text"].insert(tk.END, passage.pid)
-        self.head_elements["name_text"].delete(0, tk.END)
-        self.head_elements["name_text"].insert(tk.END, passage.name)
-        self.head_elements["tag_text"].delete(0, tk.END)
-        self.head_elements["tag_text"].insert(tk.END, passage.tags)
-        self.content_elements["content_text"].update_data(self.passages_data[passage.name])
+        # self.head_elements["pid_text"].delete(0, tk.END)
+        self.head_elements["pid_text"].config(textvariable=passage.pid)
+        # self.head_elements["name_text"].delete(0, tk.END)
+        self.head_elements["name_text"].config(textvariable=passage.name)
+        # self.head_elements["tag_text"].delete(0, tk.END)
+        self.head_elements["tag_text"].config(textvariable=passage.tags)
+        # self.head_elements["tag_text"].insert(tk.END, passage.tags)
+        self.content_elements["content_text"].update_data(passage)
         # self.content_elements["content_text"].delete(1.0, tk.END)
         # self.content_elements["content_text"].insert(tk.END, passage["text"])
         # If translation is enabled, apply it
@@ -91,18 +92,7 @@ class ContentFrame(tk.Frame):
         self.buttons_elements["escape_button"]["state"] = "active"
         self.buttons_elements["full_escape_button"]["state"] = "active"
 
-    def escape(self, left_panel, passages_data, full=None):
-        iid = left_panel.passages_list_tree.selection()[0]
-        _, selected, is_event = left_panel.passages_list_tree.item(iid)['values']
-
-        text = self.content_elements["content_text"].passage_data.text # TODO: use passage_data instead of xxx.xxx.passagge_data
-        additional_data = None
-        if full:
-            additional_data = {
-                "pid": self.head_elements["pid_text"].get(),
-                "name": self.head_elements["name_text"].get(),
-                "tags": self.head_elements["tag_text"].get(),
-            }
-        escaped = passages_data[selected].escape(data=additional_data)
+    def escape(self, full=None):
+        escaped = self.content_elements["content_text"].passage_data.escape(data=full)
         self.clipboard_clear()
         self.clipboard_append(escaped)
