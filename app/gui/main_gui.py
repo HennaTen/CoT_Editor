@@ -11,12 +11,14 @@ class MainGUI:
         self.root.state('zoomed')
 
         self.parser = CoTParser(path)
-        tabControl = ttk.Notebook(self.root)
+        self.passages_data = self.parser.passages_data
+
+        tab_control = ttk.Notebook(self.root)
         self.elements = {
-            "passage_frame": PassageFrame(tabControl, self.parser)
+            "passage_frame": PassageFrame(tab_control, self.passages_data)
         }
-        tabControl.add(self.elements["passage_frame"].frame, text='Passages')
-        tabControl.pack(expand=1, fill="both")
+        tab_control.add(self.elements["passage_frame"].frame, text='Passages')
+        tab_control.pack(expand=1, fill="both")
         # self.setup_ui()  # TODO: Not implemented
 
     def setup_ui(self):  # TODO: Not implemented

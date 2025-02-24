@@ -1,7 +1,7 @@
 import html
 
 
-class TWPassageData:
+class TWPassageData: # TODO: Should be replaced by content_data.py
     def __init__(self, pid, name, tags, position, size, content):
         self.pid = pid
         self.name = name

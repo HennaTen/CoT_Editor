@@ -2,13 +2,13 @@ import tkinter as tk
 from app.gui.elements.passage_list_tree import PassageListTree
 
 class PassageListFrame(tk.Frame):
-    def __init__(self, root, parser, **kwargs):
+    def __init__(self, root, passage_data, **kwargs):
         tk.Frame.__init__(self, root, **kwargs)
-        self.parser = parser
+        self.passage_data = passage_data
         self.search_var = tk.StringVar()
         self.search_var.trace_add("write", self.search)
         self.search_bar = tk.Entry(self, textvariable=self.search_var)
-        self.passages_list_tree = PassageListTree(self, self.parser)
+        self.passages_list_tree = PassageListTree(self, self.passage_data)
         scrollbar = tk.Scrollbar(self)
         self.passages_list_tree.config(yscrollcommand=scrollbar.set)
         scrollbar.config(command=self.passages_list_tree.yview)
@@ -23,10 +23,10 @@ class PassageListFrame(tk.Frame):
         search_text = self.search_bar.get()
         print(f"Searching for {search_text} in passages")
         self.passages_list_tree.delete(*self.passages_list_tree.get_children())
-        passages_list = self.parser.passages.get_keys()
-        for i, name in enumerate(passages_list):
+        passages_names = self.passage_data.keys()
+        for i, name in enumerate(passages_names):
             if search_text.lower() in name.lower():
-                if name in self.parser.script_parser.events:
+                if self.passage_data[name].event:
                     self.passages_list_tree.insert(
                         "",
                         tk.END,
