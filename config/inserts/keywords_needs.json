@@ -1,0 +1,54 @@
+{
+  "Rest" :
+  {
+    "begin": "Rest"
+  },
+    "Relaxation":
+    {
+        "begin": "Relaxation"
+    },
+    "Attention":
+    {
+        "begin": "Attention"
+    },
+    "Food":
+    {
+        "begin": "Food"
+    },
+    "Bladder":
+    {
+        "begin": "Bladder"
+    },
+    "Hygiene":
+    {
+        "begin": "Hygiene"
+    },
+    "Composure":
+    {
+        "begin": "Composure"
+    },
+    "Release":
+    {
+        "begin": "Release"
+    },
+    "Arousal":
+    {
+        "begin": "Arousal"
+    },
+    "Satisfaction":
+    {
+        "begin": "Satisfaction"
+    },
+    "Pain":
+    {
+        "begin": "Pain"
+    },
+    "Humiliation":
+    {
+        "begin": "Humiliation"
+    },
+    "Drunkenness":
+    {
+        "begin": "Drunkenness"
+    }
+}

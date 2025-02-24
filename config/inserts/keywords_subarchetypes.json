@@ -1,0 +1,32 @@
+{
+  "none": {
+    "begin": "none"
+  },
+    "Jaded": {
+        "begin": "Jaded"
+    },
+    "Overworked": {
+        "begin": "Overworked"
+    },
+    "Broken": {
+        "begin": "Broken"
+    },
+    "Harangued": {
+        "begin": "Harangued"
+    },
+    "Uncouth": {
+        "begin": "Uncouth"
+    },
+    "Dangerous": {
+        "begin": "Dangerous"
+    },
+    "Mild-Mannered": {
+        "begin": "Mild-Mannered"
+    },
+    "Gamer": {
+        "begin": "Gamer"
+    },
+    "Extra Corrupt": {
+        "begin": "Extra Corrupt"
+    }
+}
