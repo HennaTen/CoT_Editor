@@ -6,7 +6,7 @@ class ContentData:
         self.original = {
             "pid": pid,
             "name": name,
-            "tags": tags,
+            "tags": " ".join(tags),
             "text": text,
             "position": position,
             "size": size,

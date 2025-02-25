@@ -71,7 +71,12 @@ class SexyRightClickMenu:
     def click(self, event=None):
         print("right click")
         self.menu = tk.Menu(self.root, tearoff=0)
-        self.menu.add_checkbutton(label="Translate", onvalue=True, offvalue=False, variable=self.content_text.translate_var, command=lambda: self.content_text.toggle_translation())
+        self.menu.add_checkbutton(label="Translate", onvalue=True, offvalue=False,
+                                  variable=self.content_text.translate_var,
+                                  command=lambda: self.content_text.toggle_translation())
+        self.menu.add_separator()
+        self.menu.add_command(label="Unescape (Human)", command=lambda: self.content_text.unescape())
+        self.menu.add_command(label="Escape", command=lambda: self.content_text.escape())
         self.menu.add_separator()
         self.ranges = self.content_text.tag_ranges(tk.SEL)
 

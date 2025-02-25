@@ -1,4 +1,6 @@
 import tkinter as tk
+from html import unescape, escape
+import re
 from app.tools.json_convert import convert_dir_to_dict
 
 
@@ -78,6 +80,7 @@ class ContentText(tk.Text):
     def apply_tags(self):
         for tags in self.imported_tags.values():
             for tag, replacement in tags.items():
+                print(f"Applying tag: {tag} -> {replacement}")
                 self.highlight_pattern(replacement, "sexy_highlight")
 
     def highlight_pattern(self, pattern, tag, start="1.0", end="end",
@@ -104,3 +107,34 @@ class ContentText(tk.Text):
             self.mark_set("matchEnd", "%s+%sc" % (index, count.get()))
             self.tag_add(tag, "matchStart", "matchEnd")
 
+    def transform_passage_content(self, transformation_function):
+        # Pattern to match tw-passagedata tags and capture the content
+        pattern = r"(<tw-passagedata[^>]*>)(.*?)(</tw-passagedata>)"
+
+        new_text = None
+        if re.search(pattern, self.passage_data.text, flags=re.DOTALL):
+            def replace_function(match):
+                opening_tag = match.group(1)
+                content = match.group(2)
+                closing_tag = match.group(3)
+                print(f"opening_tag: {opening_tag}")
+                print(f"content: {content}")
+                print(f"closing_tag: {closing_tag}")
+
+                transformed_content = transformation_function(content)
+
+                return f"{opening_tag}{transformed_content}{closing_tag}"
+
+            new_text = re.sub(pattern, replace_function, self.passage_data.text, flags=re.DOTALL)
+            print(f"new_text: {new_text}")
+        else:
+            new_text = transformation_function(self.passage_data.text)
+        print(f"new_text: {new_text}")
+        self.delete("1.0", tk.END)
+        self.insert("1.0", new_text)
+
+    def unescape(self):
+        self.transform_passage_content(unescape)
+
+    def escape(self):
+        self.transform_passage_content(escape)
