@@ -7,11 +7,10 @@ from app.gui.elements.content_frame import ContentFrame
 class PassageFrame:
     def __init__(self, root, passages_data):
         self.frame = tk.Frame(root)
-        # self.parser = parser
         self.passages_data = passages_data
 
         self.passage_list_frame = PassageListFrame(self.frame, self.passages_data, relief=tk.GROOVE)
-        self.content_frame = ContentFrame(self.frame, self.passages_data, self.passage_list_frame)
+        self.content_frame = ContentFrame(self.frame, self.passages_data)
         self.event_frame = EventFrame(self.frame)
 
         self.setup_passages()

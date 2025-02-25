@@ -13,6 +13,7 @@ class ContentText(tk.Text):
         self.passage_data = passage_data
         # self.original_text = self.get("1.0", tk.END)
         self.translate_var = tk.BooleanVar()
+        self.show_original_var = tk.BooleanVar()
         self.imported_tags = convert_dir_to_dict("config/translators")
 
         self.tag_config("sexy_highlight", background="lightblue")
@@ -111,7 +112,6 @@ class ContentText(tk.Text):
         # Pattern to match tw-passagedata tags and capture the content
         pattern = r"(<tw-passagedata[^>]*>)(.*?)(</tw-passagedata>)"
 
-        new_text = None
         if re.search(pattern, self.passage_data.text, flags=re.DOTALL):
             def replace_function(match):
                 opening_tag = match.group(1)
@@ -133,8 +133,39 @@ class ContentText(tk.Text):
         self.delete("1.0", tk.END)
         self.insert("1.0", new_text)
 
+    def transform_content(self, transformation_function):
+        self.delete("1.0", tk.END)
+        self.insert("1.0", transformation_function(self.passage_data.text))
+
     def unescape(self):
         self.transform_passage_content(unescape)
 
     def escape(self):
         self.transform_passage_content(escape)
+
+    def add_tw_tags(self):
+        if not re.search(r"<tw-passagedata[^>]*>", self.passage_data.text):
+            self.transform_content(lambda content: f"{self.passage_data.get_header()}{content}{self.passage_data.get_footer()}")
+
+    def remove_tw_tags(self):
+        self.transform_content(lambda content: re.sub(r"<tw-passagedata[^>]*>|</tw-passagedata>", "", content))
+
+    # Todo: Make it work as a toggle
+    # def show_original_text(self):
+    #     original_data = self.passage_data.original["text"]
+    #     self.delete("1.0", tk.END)
+    #     self.insert("1.0", original_data)
+    #     # Disable editing
+    #     self.config(state=tk.DISABLED)
+    #
+    # def show_edited_text(self):
+    #     self.delete("1.0", tk.END)
+    #     self.insert("1.0", self.passage_data.text)
+    #     # Enable editing
+    #     self.config(state=tk.NORMAL)
+    #
+    # def toggle_original(self):
+    #     if self.show_original_var.get():
+    #         self.show_original_text()
+    #     else:
+    #         self.show_edited_text()
