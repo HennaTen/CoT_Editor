@@ -28,6 +28,7 @@ class ContentText(tk.Text):
         self.passage_data = passage_data
         self.delete('1.0', tk.END)
         self.insert('1.0', self.passage_data.text)
+        self.passage_data.undo_stack.append([self.get("1.0", "end-1c"), self.index(tk.INSERT)])
         if self.translate_var.get():
             self.apply_tags()
 
@@ -72,7 +73,7 @@ class ContentText(tk.Text):
     def on_text_modified(self, event):
         """Handle text modifications."""
         if self.edit_modified():
-            self.passage_data.undo_stack.append(self.get("1.0", "end-1c"))
+            self.passage_data.undo_stack.append([self.get("1.0", "end-1c"), self.index(tk.INSERT)])
             self.passage_data.redo_stack.clear()
 
             current_text = self.get('1.0', 'end-1c')
@@ -159,21 +160,31 @@ class ContentText(tk.Text):
 
     def undo(self, event=None):
         if self.passage_data.undo_stack:
-            if len(self.passage_data.redo_stack) == 0:
-                self.passage_data.undo_stack.pop()
-            text = self.passage_data.undo_stack.pop()
-            self.passage_data.redo_stack.append(self.get("1.0", "end-1c"))
+            print(len(self.passage_data.undo_stack))
+            if len(self.passage_data.undo_stack) <= 2:
+                undo_data = self.passage_data.undo_stack[0]
+            else:
+                if self.passage_data.undo_stack[-1][0] == self.get("1.0", "end-1c"):
+                    self.passage_data.undo_stack.pop()
+                undo_data = self.passage_data.undo_stack.pop()
+                self.passage_data.redo_stack.append([self.get("1.0", "end-1c"), self.index(tk.INSERT)])
+            text, current_pos = undo_data
             self.delete("1.0", tk.END)
             self.insert("1.0", text)
             self.edit_modified(False)
+            self.mark_set(tk.INSERT, current_pos)
+
 
     def redo(self, event=None):
         if self.passage_data.redo_stack:
-            text = self.passage_data.redo_stack.pop()
-            self.passage_data.undo_stack.append(self.get("1.0", "end-1c"))
+            redo_data = self.passage_data.redo_stack.pop()
+            self.passage_data.undo_stack.append([self.get("1.0", "end-1c"), self.index(tk.INSERT)])
+            text, current_pos = redo_data
             self.delete("1.0", tk.END)
             self.insert("1.0", text)
             self.edit_modified(False)
+            self.mark_set(tk.INSERT, current_pos)
+
 
     # Todo: Make it work as a toggle
     # def show_original_text(self):
