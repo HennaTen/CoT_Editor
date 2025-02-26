@@ -80,6 +80,11 @@ class ContentFrame(tk.Frame):
                                                                 command=lambda: self.content_elements[
                                                                     "content_text"].remove_tw_tags())
 
+        self.buttons_elements["undo_button"] = tk.Button(self.passage_buttons_frame, text="Undo",
+                                       command=lambda: self.content_elements["content_text"].undo())
+        self.buttons_elements["redo_button"] = tk.Button(self.passage_buttons_frame, text="Redo",
+                                       command=lambda: self.content_elements["content_text"].redo())
+
         translate_label.grid(column=0, row=0)
         self.buttons_elements["translate_checkbox"].grid(column=1, row=0)
         self.buttons_elements["reset_button"].grid(column=2, row=0)
@@ -89,6 +94,8 @@ class ContentFrame(tk.Frame):
         self.buttons_elements["escape_button"].grid(column=1, row=1)
         self.buttons_elements["add_tw_tags_button"].grid(column=3, row=1)
         self.buttons_elements["remove_tw_tags_button"].grid(column=4, row=1)
+        self.buttons_elements["undo_button"].grid(column=6, row=1)
+        self.buttons_elements["redo_button"].grid(column=7, row=1)
 
     def update_elements(self, passage):
         self.head_elements["pid_text"].config(textvariable=passage.pid)

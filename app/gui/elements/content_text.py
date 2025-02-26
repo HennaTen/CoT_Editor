@@ -3,13 +3,14 @@ from html import unescape, escape
 import re
 from app.tools.json_convert import convert_dir_to_dict
 
+key_to_ignore = ["Control_L", "Control_R", "z", "y"]
 
 class ContentText(tk.Text):
     # TODO: Add readonly "source" text. something that would show the original text in another tab
     # TODO: Add a "restore to source" button
     # TODO: Save changes to the original text (cache? File?)
     def __init__(self, root, passage_data, *args, **kwargs):
-        tk.Text.__init__(self, root, *args, **kwargs)
+        tk.Text.__init__(self, root, *args, **kwargs, wrap="word")
         self.passage_data = passage_data
         # self.original_text = self.get("1.0", tk.END)
         self.translate_var = tk.BooleanVar()
@@ -19,13 +20,16 @@ class ContentText(tk.Text):
         self.tag_config("sexy_highlight", background="lightblue")
         self.tag_config("naughty_highlight", background="red")
 
+        self.bind("<Control-z>", self.undo)
+        self.bind("<Control-y>", self.redo)
         self.bind('<<Modified>>', self.on_text_modified)
 
     def update_data(self, passage_data):
         self.passage_data = passage_data
         self.delete('1.0', tk.END)
         self.insert('1.0', self.passage_data.text)
-        self.apply_tags()
+        if self.translate_var.get():
+            self.apply_tags()
 
     def translate_text(self):
         """Translate text by replacing tags with their corresponding values."""
@@ -64,11 +68,14 @@ class ContentText(tk.Text):
         # Restore cursor position
         self.mark_set(tk.INSERT, current_pos)
 
+
     def on_text_modified(self, event):
         """Handle text modifications."""
         if self.edit_modified():
-            current_text = self.get('1.0', 'end-1c')
+            self.passage_data.undo_stack.append(self.get("1.0", "end-1c"))
+            self.passage_data.redo_stack.clear()
 
+            current_text = self.get('1.0', 'end-1c')
             if not self.translate_var.get():
                 # Update original text when editing in untranslated mode
                 self.passage_data.text = current_text
@@ -149,6 +156,24 @@ class ContentText(tk.Text):
 
     def remove_tw_tags(self):
         self.transform_content(lambda content: re.sub(r"<tw-passagedata[^>]*>|</tw-passagedata>", "", content))
+
+    def undo(self, event=None):
+        if self.passage_data.undo_stack:
+            if len(self.passage_data.redo_stack) == 0:
+                self.passage_data.undo_stack.pop()
+            text = self.passage_data.undo_stack.pop()
+            self.passage_data.redo_stack.append(self.get("1.0", "end-1c"))
+            self.delete("1.0", tk.END)
+            self.insert("1.0", text)
+            self.edit_modified(False)
+
+    def redo(self, event=None):
+        if self.passage_data.redo_stack:
+            text = self.passage_data.redo_stack.pop()
+            self.passage_data.undo_stack.append(self.get("1.0", "end-1c"))
+            self.delete("1.0", tk.END)
+            self.insert("1.0", text)
+            self.edit_modified(False)
 
     # Todo: Make it work as a toggle
     # def show_original_text(self):

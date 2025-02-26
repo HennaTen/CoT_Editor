@@ -19,6 +19,9 @@ class ContentData:
         self.text = text
         self.event = event
 
+        self.undo_stack = []
+        self.redo_stack = []
+
     def get_header(self):
         return (f'<tw-passagedata pid="{self.pid.get()}" name="{self.name.get()}" tags="{self.tags.get()}" '
                 f'position="{self.original["position"]}" size="{self.original["size"]}">')
